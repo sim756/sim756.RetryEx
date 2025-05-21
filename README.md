@@ -1,103 +1,139 @@
 # Resilient Retry Mechanism
 
-###### Example 1:
+## Examples
+
+### Example 1
+Retry with Exception handling and executing only on Invoke() call.
 
 ```c#
-new Retry(
+Retry numberRetry = new Retry(
     retryAction: () =>
     {
-        // write your code here, thrown exception will be retried
+        WriteExampleHeader();
+
+        int randomNumber = GenerateRandomNumber();
+        Console.WriteLine($"Random number: {randomNumber}");
     },
-    count: 10, // number of retries
-    delay: 1000, // delays between retries in milliseconds
     exceptionAction: (exception) =>
     {
-        // handle exception here
-        // this action will be called for each retry
-        // you can log the exception or perform any other action
+        Console.WriteLine($"Exception: {exception.Message}");
     }
 );
+
+numberRetry.Invoke();
 ```
 
-OR, shorter form,
-
-###### Example 2:
-
-```c#
-new Retry(() =>
-    {
-        // write your code here, thrown exception will be retried
-    },
-    10, // number of retries
-    1000, // delays between retries in milliseconds
-    (ex) =>
-    {
-        // handle exception here
-    }
-);
-```
-
-Catching specific exceptions
-
-###### Example 3:
+### Example 2
+Retry with Exception handling with specified delays and retry count; no manual invocation needed, it auto executes.
 
 ```c#
-new Retry(
+new Retry
+(
     retryAction: () =>
     {
-        //where exception could be thrown
+        WriteExampleHeader();
+        
+        int randomNumber = GenerateRandomNumber();
+        Console.WriteLine($"Random number: {randomNumber}");
     },
-    count: 10,
-    delay: 5000,
+    count: 10, // retying 10 times until success or all 10 retries fails.
+    delay: 1000, // 1-second delay between retries.
     exceptionAction: (exception) =>
     {
-        try
-        {
-            throw exception; // rethrow exception to recatch specific exceptions.
-        }
-        catch (IOException e)
-        {
-            //Add code here            
-        }
-        catch (NullReferenceException e)
-        {
-            //Add code here
-        }
-        //catch additional Exceptions here
+        Console.WriteLine($"Exception: {exception.Message}");
     }
-);
+).Invoke();
 ```
 
-With parameters and return,
-
-###### Example 4:
+### Example 3
+Retry with parameters and return value.
 
 ```c#
-int retVal = new Retry<(int a, int b, int c), int>
-        (
-            retryFunc: (parameters) =>
+int retValExample3 = new Retry<(int para1, int para2, int para3), int>
+(
+    param =>
+    {
+        WriteExampleHeader();
+
+        int randomNumber = GenerateRandomNumber();
+        int result = randomNumber + param.para1 + param.para2 + param.para3;
+        return result; // Returning result to the retVal.
+    },
+    (10, 100, 1000), // parameter values
+    2, // retry count
+    1000, // delay in milliseconds
+    ex =>
+    {
+        Console.WriteLine($"Exception: {ex.Message}");
+    }
+).Invoke();
+
+Console.WriteLine($"retValExample3: {retValExample3}");
+```
+
+### Example 4
+Retry with parameters and return value.
+
+```c#
+Retry<(int para1, int para2, int para3), int> retryExample4
+    = new
+    (
+        param =>
+        {
+            WriteExampleHeader();
+            
+            int randomNumber = GenerateRandomNumber();
+            int result = randomNumber + param.para1 + param.para2 + param.para3;
+            return result; // Returning result to the retVal.
+        },
+        (10, 100, 1000), // parameter values
+        count: 2, // retry count
+        delay: 1000, // delay in milliseconds
+        ex =>
+        {
+            Console.WriteLine($"Exception: {ex.Message}"); 
+        }
+    );
+
+retryExample4.Invoke();
+
+Console.WriteLine($"retryExample4.Result: {retryExample4.Result}");
+```
+
+### Example 5
+Retry with parameters and return value, and with additional custom exception handling.
+
+```c#
+Retry<(int para1, int para2, int para3), int> retryExample5
+    = new(
+        param =>
+        {
+            WriteExampleHeader();
+
+            int randomNumber = GenerateRandomNumber();
+            int result = randomNumber + param.para1 + param.para2 + param.para3;
+            return result; // Returning result to the retVal.
+        },
+        (10, 100, 1000), // parameter values
+        2, // retry count
+        1000, // delay in milliseconds
+        exception =>
+        {
+            try
             {
-                // where exception could be thrown
-                return (parameters.a + parameters.b + parameters.c);
-            },
-            parameters: (a: 123, b: 123, c: 1234),
-            count: 3,
-            delay: 756,
-            exceptionAction: (exception) =>
-            {
-                try
-                {
-                    throw exception; // rethrow exception to recatch specific exceptions.
-                }
-                catch (IOException e)
-                {
-                    //Add code here            
-                }
-                catch (NullReferenceException e)
-                {
-                    //Add code here
-                }
-                //catch additional Exceptions here
+                throw exception;
             }
-        ).Result;
+            catch (InvalidDataException ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+        }
+    );
+
+retryExample5.Invoke();
+Console.WriteLine($"retryExample5.Result: {retryExample5.Result}");
 ```

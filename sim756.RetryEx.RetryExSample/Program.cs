@@ -110,42 +110,43 @@ internal class Program
         WriteConsoleGap();
 
         // Example 5: Retry with parameters and return value.
-        Console.WriteLine("Example 5");
+        {
+            Console.WriteLine("Example 5");
 
-        Retry<(int para1, int para2, int para3), int> retryExample5
-            = new(
-                param =>
-                {
-                    WriteExampleHeader();
-                    
-                    int randomNumber = GenerateRandomNumber();
-                    int result = randomNumber + param.para1 + param.para2 + param.para3;
-                    return result; // Returning result to the retVal.
-                },
-                (10, 100, 1000), // parameter values
-                2, // retry count
-                1000, // delay in milliseconds
-                exception =>
-                {
-                    try
+            Retry<(int para1, int para2, int para3), int> retryExample5
+                = new(
+                    param =>
                     {
-                        throw exception;
-                    }
-                    catch (InvalidDataException ex)
+                        WriteExampleHeader();
+
+                        int randomNumber = GenerateRandomNumber();
+                        int result = randomNumber + param.para1 + param.para2 + param.para3;
+                        return result; // Returning result to the retVal.
+                    },
+                    (10, 100, 1000), // parameter values
+                    2, // retry count
+                    1000, // delay in milliseconds
+                    exception =>
                     {
-                        Console.WriteLine($"Exception: {ex.Message}");
+                        try
+                        {
+                            throw exception;
+                        }
+                        catch (InvalidDataException ex)
+                        {
+                            Console.WriteLine($"Exception: {ex.Message}");
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.StackTrace);
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.StackTrace);
-                    }
-                }
-            );
-        
-        retryExample5.Invoke();
-        Console.WriteLine($"retryExample5.Result: {retryExample5.Result}");
-        
-        
+                );
+
+            retryExample5.Invoke();
+            Console.WriteLine($"retryExample5.Result: {retryExample5.Result}");
+        }
+
         Console.Write("\n\nPress any key to continue . . . ");
         Console.ReadKey();
     }
