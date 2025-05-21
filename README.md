@@ -1,5 +1,8 @@
 # Resilient Retry Mechanism
 
+## NuGet
+[https://www.nuget.org/packages/sim756.RetryEx](https://www.nuget.org/packages/sim756.RetryEx)
+
 ## Examples
 
 ### Example 1
