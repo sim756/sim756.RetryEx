@@ -12,6 +12,9 @@
         <RepositoryUrl>github.com/sim756/sim756.RetryEx</RepositoryUrl>
         <PackageTags>Retry, Try</PackageTags>
         <Company>sim756</Company>
+        <PackageLicenseUrl>https://raw.githubusercontent.com/sim756/sim756.RetryEx/refs/heads/main/LICENSE </PackageLicenseUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReleaseNotes>Resilient retry mechanism</PackageReleaseNotes>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-
 </Project>
