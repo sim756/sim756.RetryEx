@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Folder Name="/SolutionFolder/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="sim756.RetryEx.RetryExSample\sim756.RetryEx.RetryExSample.csproj" Type="Classic C#" />
+  <Project Path="sim756.RetryEx\sim756.RetryEx.csproj" Type="Classic C#" />
+</Solution>
