@@ -1,4 +1,8 @@
-﻿namespace sim756.RetryEx.RetryExSample;
+﻿// sim756.RetryEx
+// https://github.com/sim756/sim756.RetryEx
+// https://www.nuget.org/packages/sim756.RetryEx
+
+namespace sim756.RetryEx.RetryExSample;
 
 internal class Program
 {
