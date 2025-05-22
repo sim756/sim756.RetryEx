@@ -3,6 +3,39 @@
 ## NuGet
 [https://www.nuget.org/packages/sim756.RetryEx](https://www.nuget.org/packages/sim756.RetryEx)
 
+## Syntax
+### Syntax 1
+```c#
+Retry retry = new Retry(
+    retryAction: () =>
+    {
+        // Your code here
+    },
+    exceptionAction: (exception) =>
+    {
+        // Exception handling code here
+    }
+);
+retry.Invoke();
+```
+
+### Syntax 2
+```c#
+Retry retry = new Retry(
+    () =>
+    {
+        // Your code here
+    },
+    3,
+    100,
+    (exception) =>
+    {
+        // Exception handling code here
+    }
+);
+retry.Invoke();
+```
+
 ## Examples
 
 ### Example 1
